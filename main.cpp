@@ -29,15 +29,22 @@ class IniFile{
     template <typename T>
     static void WritePrivateProfile(const string &lpAppName,const string &lpKeyName, T tData,const string &lpFileName )
     {
+        ptree root;
+        ptree newNode;
+        newNode.put(lpKeyName, tData);
         try
         {
-            ptree root;
             read_ini(lpFileName, root);
-            ptree newNode;
-            newNode.add(lpKeyName, tData);
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        
+        try
+        {
             root.put_child(lpAppName, newNode);
             write_ini(lpFileName, root);
-            
         }
         catch(const std::exception& e)
         {
